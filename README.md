@@ -33,7 +33,7 @@ The project has three main components:
 
 1. **Documentation Model**: defined by simple JavaBeans such as `Resource`, `Operation`, `Parameter`, and others (see package _org.lightdocs.model_ ).
 2. **Documentation Builder**: which will create the basic documentation structure processing JAX-RS annotations and firing events as new operations and resources are added. These events will be picked up by different processors that will augment the model. _Custom processors could be added to extends this project processing more annotations_.
-3. **Documentation DSL**: a Groovy-base Domain Specific Language used to write about concepts and behaviors that can't be explained with the annotations alone.
+3. **Documentation DSL**: a Groovy-based Domain Specific Language used to write about concepts and behaviors that can't be explained with the annotations alone.
 
 
 How to use
@@ -41,7 +41,7 @@ How to use
 
 ###Step 1: import the required libraries
 
-Note: the project packages are in being uploaded following Sonar procedures, so they might not available yet (Sep 13th, 2014).
+Note: the project packages are being uploaded following Sonar procedures, so they might not available yet (Sep 13th, 2014).
 
 ####Maven:
 ```xml
