@@ -86,7 +86,7 @@ For example:
 @GET
 @Path("/user/${id}/tickets")
 @DocumentedBy("getTickets.groovy")
-void getTickets(@PathParam Integer userId, @QueryParam("category") categoryFilter);
+void getTickets(@PathParam Integer id, @QueryParam("category") categoryFilter);
 ```
 
 And then include the `getTickets.groovy` file with your resources:
@@ -134,13 +134,13 @@ The directory `lightdoc-examples` contains a ready-to-go example project. More e
 | Subdir | Technologies | Instructions |
 |---|---|---|
 |resteasy-spring| Java, JBoss Resteasy, Spring IoC | run `mvn jetty:run` and browse http://localhost:8080/api to see the generated JSON model. Check Catalog.java and the DSL scripts (*.groovy files).
-|cxf-guice| Java, Apache CXF, Guice| (not available) |
+|cxf-guice| Java, Apache CXF, Guice| (not done yet...) |
 
 
 Current development status - How to contribute
 ---
 
-The current development status is "stable", however this is not yet v1.0 because it doesn't support all the possible JAX-RS use cases. For example, some annotations are ignored (e.g. Matrix parameters). I've prioritized the set of features that were needed for a personal project and then released the code "as is". If you find that something you need is still not implemented, feel free to fork the repository code what is missing or, even better, contribute it back to project.
+The current development status is "stable", however this is not yet v1.0 because it doesn't support all the possible JAX-RS use cases. For example, some annotations are ignored (e.g. Matrix parameters). I've prioritized the set of features that were needed for a personal project and then released the code "as is". If you find that something you need is still not implemented, feel free to fork the repository and code what is missing or contribute it back to project.
 
 If you want to contribute, the standard [fork](https://help.github.com/articles/fork-a-repo) and [pull request](https://help.github.com/articles/using-pull-requests) strategy should work fine. However, please take into account that it would be best if we keep the project focused and small, adding more features in a modular way. Some examples:
 
