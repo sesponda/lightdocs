@@ -31,7 +31,7 @@ Description
 
 The project has three main components:
 
-1. **Documentation Model**: defined by simple JavaBeans such as `Resource`, `Operation`, `Parameter`, and others (see package _org.lightdocs.model_ ).
+1. **Documentation Model**: defined by simple JavaBeans such as `Resource`, `Operation`, `Parameter`, and others (see package _com.github.lightdocs.model_ ).
 2. **Documentation Builder**: which will create the basic documentation structure processing JAX-RS annotations and firing events as new operations and resources are added. These events will be picked up by different processors that will augment the model. _Custom processors could be added to extends this project processing more annotations_.
 3. **Documentation DSL**: a Groovy-based Domain Specific Language used to write about concepts and behaviors that can't be explained with the annotations alone.
 
@@ -46,7 +46,7 @@ Note: the project packages are being uploaded following Sonar procedures, so the
 ####Maven:
 ```xml
 <dependency>
-    <groupId>org.lightdocs</groupId>
+    <groupId>com.github.lightdocs</groupId>
     <artifactId>lightdocs</artifactId>
     <version>0.3</version>
 </dependency>
@@ -55,7 +55,7 @@ Note: the project packages are being uploaded following Sonar procedures, so the
 ####Gradle:
 ```groovy
 dependencies {
-    runtime group: 'org.lightdocs', name: 'lightdocs', version: '0.3'
+    runtime group: 'com.github.lightdocs', name: 'lightdocs', version: '0.3'
 }
 ```
 
