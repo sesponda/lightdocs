@@ -16,12 +16,12 @@
 
 
 	<context:annotation-config />
-	<context:component-scan base-package="org.lightdocs.examples" />
+	<context:component-scan base-package="com.github.lightdocs.examples" />
 
-	<bean class="org.lightdocs.examples.resource.API">
+	<bean class="com.github.lightdocs.examples.resource.API">
 		<constructor-arg>
 			<list>
-				<value>org.lightdocs.examples.resource.Catalog</value>
+				<value>com.github.lightdocs.examples.resource.Catalog</value>
 			</list>
 		</constructor-arg>
 	</bean>

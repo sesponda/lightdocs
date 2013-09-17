@@ -18,7 +18,7 @@
 		<maven>2.2.1</maven>
 	</prerequisites>
 	<artifactId>lightdocs</artifactId>
-	<groupId>org.lightdocs</groupId>
+	<groupId>com.github.lightdocs</groupId>
 	<version>0.3</version>
 	<packaging>jar</packaging>
 	<name>Lightdocs</name>
