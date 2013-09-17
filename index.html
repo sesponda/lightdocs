@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Lightdocs by sesponda</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Lightdocs</h1>
+        <h2></h2>
+        <a href="https://github.com/sesponda/lightdocs" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="home" class="anchor" href="#home"><span class="octicon octicon-link"></span></a>Home</h1>
+
+<p><strong>Lightdocs</strong> is a framework for documenting web services implemented using the Java API for RESTful Services specification. Half of the work is done by the framework automatically extracting information from the JAX-RS annotations. The other half is augmenting the generated documentation using a DSL (Domain Specific Language) as needed.</p>
+
+<h2>
+<a name="introduction" class="anchor" href="#introduction"><span class="octicon octicon-link"></span></a>Introduction</h2>
+
+<p>While it is true that REST services should be self-descriptive and developer-friendly, sometimes you need to document complex behaviors and concepts.  </p>
+
+<p>The framework will automatically generate basic documentation such as:</p>
+
+<ul>
+<li>Enumerating resources and operations.</li>
+<li>Documenting supported content types.</li>
+<li>Listing required and optional Header/Path/Query parameters.</li>
+</ul><p>The generated model can be augmented using a Groovy based DSL, for example:</p>
+
+<ul>
+<li>Providing request/response examples.</li>
+<li>Explaining pre- and post-conditions.</li>
+<li>...or any other concept you need to clarify to your API users.</li>
+</ul><p>You can have several independent DSL scripts and apply them to specific methods or parameters using an annotation. For example, if you have several methods that reuse the same complex data type, you can  create one DSL to describe that data type once, and re-apply it as needed. The DSL scripts can be packaged with the application, or located using file:// or http:// URIs.</p>
+
+<p>The final documentation is exported in an object model that can be consumed by other clients.</p>
+
+<p><em><strong>Note:</strong> there is a complementary project (yet to be released) that will be able to consume this data model and generate a user-friendly Web UI to publish such information, also including dynamic web-forms that will allow the developers to make quick test calls.</em></p>
+
+<h2>
+<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>Description</h2>
+
+<p>The project has three main components:</p>
+
+<ol>
+<li>
+<strong>Documentation Model</strong>: defined by simple JavaBeans such as <code>Resource</code>, <code>Operation</code>, <code>Parameter</code>, and others (see package <em>org.lightdocs.model</em> ).</li>
+<li>
+<strong>Documentation Builder</strong>: which will create the basic documentation structure processing JAX-RS annotations and firing events as new operations and resources are added. These events will be picked up by different processors that will augment the model. <em>Custom processors could be added to extends this project processing more annotations</em>.</li>
+<li>
+<strong>Documentation DSL</strong>: a Groovy-based Domain Specific Language used to write about concepts and behaviors that can't be explained with the annotations alone.</li>
+</ol><h2>
+<a name="how-to-use" class="anchor" href="#how-to-use"><span class="octicon octicon-link"></span></a>How to use</h2>
+
+<h3>
+<a name="step-1-import-the-required-libraries" class="anchor" href="#step-1-import-the-required-libraries"><span class="octicon octicon-link"></span></a>Step 1: import the required libraries</h3>
+
+<p>Note: the project packages are being uploaded following Sonar procedures, so they might not available yet (Sep 13th, 2014).</p>
+
+<h4>
+<a name="maven" class="anchor" href="#maven"><span class="octicon octicon-link"></span></a>Maven:</h4>
+
+<div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
+    <span class="nt">&lt;groupId&gt;</span>org.lightdocs<span class="nt">&lt;/groupId&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>lightdocs<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;version&gt;</span>0.3<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+
+</pre></div>
+
+<h4>
+<a name="gradle" class="anchor" href="#gradle"><span class="octicon octicon-link"></span></a>Gradle:</h4>
+
+<div class="highlight highlight-groovy"><pre><span class="n">dependencies</span> <span class="o">{</span>
+    <span class="n">runtime</span> <span class="nl">group:</span> <span class="s1">'org.lightdocs'</span><span class="o">,</span> <span class="nl">name:</span> <span class="s1">'lightdocs'</span><span class="o">,</span> <span class="nl">version:</span> <span class="s1">'0.3'</span>
+<span class="o">}</span>
+</pre></div>
+
+<h3>
+<a name="step-2-create-a-modelbuilder-object-listing-your-jax-rs-classes" class="anchor" href="#step-2-create-a-modelbuilder-object-listing-your-jax-rs-classes"><span class="octicon octicon-link"></span></a>Step 2: create a <code>ModelBuilder</code> object listing your JAX-RS classes.</h3>
+
+<p>The following example creates a web service that will export the generated documentation model in JSON.</p>
+
+<div class="highlight highlight-java"><pre><span class="nd">@Resource</span>
+<span class="nd">@Path</span><span class="o">(</span><span class="s">"/api"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">API</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="n">ServiceDocumentation</span> <span class="n">apidocs</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">API</span><span class="o">(</span><span class="n">String</span><span class="o">...</span> <span class="n">classes</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">apidocs</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ModelBuilder</span><span class="o">().</span><span class="na">buildModelFor</span><span class="o">(</span><span class="n">classes</span><span class="o">);</span>        
+    <span class="o">}</span>
+    <span class="nd">@GET</span>
+    <span class="nd">@Produces</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="o">{</span> <span class="n">MediaType</span><span class="o">.</span><span class="na">APPLICATION_JSON</span><span class="o">})</span>
+    <span class="kd">public</span> <span class="n">Response</span> <span class="nf">getAPIDocModel</span><span class="o">()</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="n">Response</span><span class="o">.</span><span class="na">ok</span><span class="o">(</span><span class="n">apidocs</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
+<h3>
+<a name="step-3-optional-add-more-documentation-using-the-provided-dsl" class="anchor" href="#step-3-optional-add-more-documentation-using-the-provided-dsl"><span class="octicon octicon-link"></span></a>Step 3 (optional): add more documentation using the provided DSL</h3>
+
+<p>For example:</p>
+
+<div class="highlight highlight-java"><pre><span class="nd">@GET</span>
+<span class="nd">@Path</span><span class="o">(</span><span class="s">"/user/${id}/tickets"</span><span class="o">)</span>
+<span class="nd">@DocumentedBy</span><span class="o">(</span><span class="s">"getTickets.groovy"</span><span class="o">)</span>
+<span class="kt">void</span> <span class="nf">getTickets</span><span class="o">(</span><span class="nd">@PathParam</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">,</span> <span class="nd">@QueryParam</span><span class="o">(</span><span class="s">"category"</span><span class="o">)</span> <span class="n">categoryFilter</span><span class="o">);</span>
+</pre></div>
+
+<p>And then include the <code>getTickets.groovy</code> file with your resources:</p>
+
+<div class="highlight highlight-groovy"><pre><span class="n">description</span> <span class="o">=</span> <span class="s2">"Returns the open tickets for the user."</span>
+
+<span class="n">requestBody</span><span class="o">.</span><span class="na">description</span> <span class="o">=</span> <span class="s2">"""</span>
+<span class="s2">  This is a sample description, written using a Groovy multi line string </span>
+<span class="s2">  (delimited with triple line quotes). Multi line strings can contain code and variables, </span>
+<span class="s2">  and do not need to escape &lt;html/&gt; or \n &amp;nsbs;</span>
+<span class="s2">  You can also include dynamic code that will be evaluated when the </span>
+<span class="s2">  script is run. For example: document generated at ${ new Date()}</span>
+<span class="s2">  """</span>
+<span class="n">requestBody</span><span class="o">.</span><span class="na">example</span> <span class="o">=</span> <span class="s2">"Here you can put a JSON example of the request body."</span>
+<span class="n">responseBody</span><span class="o">.</span><span class="na">example</span> <span class="o">=</span> <span class="s2">"Here you can put a JSON example of the response body."</span>
+
+<span class="n">headerParam</span><span class="o">(</span><span class="s2">"X-Auth"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">description</span> <span class="o">=</span> <span class="s2">"""(Note that the Java code does not include this </span>
+<span class="s2">  header parameter. However, we can still document it, for example </span>
+<span class="s2">  if it is something not yet fully implemented but required as per </span>
+<span class="s2">  the API spec.</span>
+<span class="s2">  """</span>
+  <span class="n">required</span> <span class="o">=</span> <span class="kc">true</span>
+  <span class="n">validationRules</span> <span class="o">=</span> <span class="s2">"RegExp: [A-Z][A-Z0-9]*"</span>
+<span class="o">}</span>
+
+<span class="n">queryParam</span><span class="o">(</span><span class="s2">"category"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">description</span> <span class="o">=</span> <span class="s2">"""One specific category to use as a filter. </span>
+<span class="s2">  If not specified, all non-archived categories will be returned.</span>
+<span class="s2">  """</span>
+<span class="o">}</span>
+
+<span class="n">pathParam</span><span class="o">(</span><span class="s2">"id"</span><span class="o">)</span> <span class="o">{</span>
+  <span class="n">description</span> <span class="o">=</span> <span class="s2">"The numeric ID of the user."</span>
+  <span class="n">required</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="o">}</span>
+</pre></div>
+
+<h2>
+<a name="examples" class="anchor" href="#examples"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<p>The directory <code>lightdoc-examples</code> contains a ready-to-go example project. More examples might be added later.</p>
+
+<table>
+<thead><tr>
+<th>Subdir</th>
+<th>Technologies</th>
+<th>Instructions</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>resteasy-spring</td>
+<td>Java, JBoss Resteasy, Spring IoC</td>
+<td>run <code>mvn jetty:run</code> and browse http://localhost:8080/api to see the generated JSON model. Check Catalog.java and the DSL scripts (*.groovy files).</td>
+</tr>
+<tr>
+<td>cxf-guice</td>
+<td>Java, Apache CXF, Guice</td>
+<td>(not done yet...)</td>
+</tr>
+</tbody>
+</table><h2>
+<a name="current-development-status---how-to-contribute" class="anchor" href="#current-development-status---how-to-contribute"><span class="octicon octicon-link"></span></a>Current development status - How to contribute</h2>
+
+<p>The current development status is "stable", however this is not yet v1.0 because it doesn't support all the possible JAX-RS use cases. For example, some annotations are ignored (e.g. Matrix parameters). I've prioritized the set of features that were needed for a personal project and then released the code "as is". If you find that something you need is still not implemented, feel free to fork the repository and code what is missing or contribute it back to project.</p>
+
+<p>If you want to contribute, the standard <a href="https://help.github.com/articles/fork-a-repo">fork</a> and <a href="https://help.github.com/articles/using-pull-requests">pull request</a> strategy should work fine. However, please take into account that it would be best if we keep the project focused and small, adding more features in a modular way. Some examples:</p>
+
+<ul>
+<li>New annotations can be supported adding more processors (instead of adding code to the existent ones). </li>
+<li>New processors could be added in a separate module. Example, <code>lightdocs-resteasy</code> to process Resteasy custom annotations such as <code>@ClientResponseType</code>.</li>
+<li>A Spring BeanPostProcessor could be added to <code>lightdocs-spring</code> to discover the list of JAXRS classes (instead of providing them as a list of classes).</li>
+<li>Etc...</li>
+</ul><h4>
+<a name="future-development-ideas" class="anchor" href="#future-development-ideas"><span class="octicon octicon-link"></span></a>Future development ideas</h4>
+
+<ul>
+<li>
+<em>Convention over configuration</em>: simplify the set up of DSL scripts defining a strategy for their location (e.g. className-methodName.groovy). In this way, you don't need to specify the DSL location for each class method using the <code>@DocumentedBy</code> annotation (the framework will pick it up following the convention).</li>
+<li>
+<em>Automatic documentation of types</em>: everytime a complex datatype is used as the request or response object, introspect that Java bean and document the type. Beside introspecting the bean to list its attributes, JSR-303 or Jackson annotations could be processed to add more information. A type-oriented DSL could be added too.</li>
+</ul>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/sesponda/lightdocs/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/sesponda/lightdocs/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/sesponda/lightdocs"></a> is maintained by <a href="https://github.com/sesponda">sesponda</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
