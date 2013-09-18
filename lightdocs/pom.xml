@@ -19,7 +19,7 @@
 	</prerequisites>
 	<artifactId>lightdocs</artifactId>
 	<groupId>com.github.lightdocs</groupId>
-	<version>0.3</version>
+	<version>0.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Lightdocs</name>
 	<description>A JAXRS API Documentation Framework and DSL</description>
@@ -43,9 +43,9 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:http://github.com/sesponda/lightdocs.git</connection>
-		<developerConnection>scm:git:git@github.com:sesponda/lightdocs.git</developerConnection>
-		<url>http://github.com/sesponda/lightdocs.git</url>
+		<connection>scm:git:http://github.com/sesponda/lightdocs.git</connection>
+		<developerConnection>scm:git:git://github.com/sesponda/lightdocs.git</developerConnection>
+		<url>http://github.com/sesponda/lightdocs</url>
 	</scm>
 
 	<dependencies>
@@ -158,6 +158,11 @@
 								</goals>
 							</execution>
 						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-release-plugin</artifactId>
+						<version>2.4.1</version>
 					</plugin>
 				</plugins>
 			</build>
