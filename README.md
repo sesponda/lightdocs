@@ -48,14 +48,14 @@ Note: the project packages are being uploaded following Sonar procedures, so the
 <dependency>
     <groupId>com.github.lightdocs</groupId>
     <artifactId>lightdocs</artifactId>
-    <version>0.3</version>
+    <version>0.4</version>  //please use latest version
 </dependency>
             
 ```
 ####Gradle:
 ```groovy
 dependencies {
-    runtime group: 'com.github.lightdocs', name: 'lightdocs', version: '0.3'
+    runtime group: 'com.github.lightdocs', name: 'lightdocs', version: '0.4'
 }
 ```
 
