@@ -18,7 +18,7 @@
 	</prerequisites>
 	<artifactId>lightdocs</artifactId>
 	<groupId>com.github.lightdocs</groupId>
-	<version>0.4</version>
+	<version>0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Lightdocs</name>
 	<description>A JAXRS API Documentation Framework and DSL</description>
